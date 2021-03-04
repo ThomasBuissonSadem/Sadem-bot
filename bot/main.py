@@ -1,7 +1,8 @@
 import discord
+from discord.ext import commands
 import os
 
-client = discord.Client()
+client = commands.Bot(command_prefix=".")
 
 @client.event
 async def on_ready():
@@ -9,13 +10,16 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-
     if message.content.startswith('hello'):
       for member in message.guild.members:
         print(f'Membre: {member} \n')
         if 'Administrateurs' in member.roles:
           print(f'MESSAGE')
           await member.send("Hello")
-  
 
-client.run(os.getenv('TOKEN')) 
+# Commande permettant de supprimer 5 messages sur le channel concerné
+@client.command()
+async def clear(ctx, amount=5) :
+    await ctx.channel.purge(limit=amount)
+
+client.run(os.getenv('DISCORD_BOT_TOKEN'))
